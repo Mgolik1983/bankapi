@@ -81,3 +81,15 @@ class UserInfo(BaseModel):
 
     class Config:
         orm_mode = True
+class LoginForm(BaseModel):
+    email: EmailStr = Field(
+        title='User Email',
+        description='User Unique Email'
+    )
+    password: str = Field(
+        title='User Password',
+        description='User Password',
+        min_length=8,
+        max_length=64,
+        regex=r'((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})'
+    )
