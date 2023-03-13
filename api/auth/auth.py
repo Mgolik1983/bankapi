@@ -1,11 +1,9 @@
 from fastapi import APIRouter, HTTPException, status
-
+from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
 from Core.models import User
 from Core.schemas import UserInfo, RegisterForm, LoginForm
 router = APIRouter()
-router = APIRouter()
-
 
 @router.post(
     '/register',
@@ -31,8 +29,7 @@ async def register_user(register_form: RegisterForm):
 )
 async def login(login_form: LoginForm):
     user = await User.select(
-        select(User)
-        .filter(User.email == login_form.email)
+        User.email == login_form.email
     )
     if user:
         user = user[0]
