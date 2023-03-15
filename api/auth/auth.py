@@ -2,7 +2,9 @@ from fastapi import APIRouter, HTTPException, status
 from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
 from Core.models import User
-from Core.schemas import UserInfo, RegisterForm, LoginForm
+from Core.schemas import UserInfo, RegisterForm, LoginForm, TokenSchema
+from Core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM
+
 router = APIRouter()
 
 @router.post(
