@@ -1,6 +1,11 @@
+from datetime import datetime, timedelta
+
 from fastapi import APIRouter, HTTPException, status
 from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
+
+from jose import jwt, JWTError
+
 from Core.models import User
 from Core.schemas import UserInfo, RegisterForm, LoginForm, TokenSchema
 from Core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM, TOKEN_TYPE
@@ -43,5 +48,10 @@ async def login(login_form: LoginForm):
         except ValidationError:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='не верный пароль')
         else:
-            return user_info
+            data = {
+                'sum': user_info.username,
+                'exp': datetime.utcnow() + timedelta(minutes=EXPIRE_JWT_TOKEN)
+            }
+            token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+            return TokenSchema(access_token=token, token_type=TOKEN_TYPE)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='пользователь не найдет')
