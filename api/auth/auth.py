@@ -6,9 +6,9 @@ from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
 from jose import jwt, JWTError
 
-from Core.models import User
-from Core.schemas import UserInfo, RegisterForm, LoginForm, TokenSchema
-from Core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM, TOKEN_TYPE
+from core.models import User
+from core.schemas import UserInfo, RegisterForm, LoginForm, TokenSchema
+from core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM, TOKEN_TYPE
 
 router = APIRouter()
 
