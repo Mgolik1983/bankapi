@@ -3,7 +3,7 @@ from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
 from Core.models import User
 from Core.schemas import UserInfo, RegisterForm, LoginForm, TokenSchema
-from Core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM
+from Core.settings import SECRET_KEY, EXPIRE_JWT_TOKEN, ALGORITHM, TOKEN_TYPE
 
 router = APIRouter()
 
@@ -26,8 +26,7 @@ async def register_user(register_form: RegisterForm):
 
 @router.post(
     '/login',
-    response_model=UserInfo,
-    response_model_exclude={'password', 'hashed_password', 'pk'}
+    response_model=TokenSchema
 )
 async def login(login_form: LoginForm):
     user = await User.select(
