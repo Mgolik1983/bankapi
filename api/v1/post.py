@@ -81,3 +81,32 @@ async def delete_post(
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='post not found')
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='user was blocked')
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='invalid token type')
+
+
+@post_router.put('/', status_code=status.HTTP_202_ACCEPTED)
+async def update_post(
+        post_detail: PostDetail,
+        authorization: str = Header()
+):
+    if authorization.startswith(TOKEN_TYPE):
+        authorization = authorization.split()[1]
+        try:
+            payload = jwt.decode(authorization, SECRET_KEY, ALGORITHM)
+        except JWTError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='token invalid')
+        else:
+            user = await User.select(User.username == payload.get('sub'))
+            if user:
+                user = user[0]
+                post = await Post.get(post_id)
+                if post:
+                    if post.author_id == user.pk:
+                        await  post.delete()
+                        return {'detail': 'post deleted successfully'}
+                    raise HTTPException(
+                            status_code=status.HTTP_404_NOT_FOUND,
+                            detail='you are not author of the post'
+                        )
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='post not found')
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='user was blocked')
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='invalid token type')
