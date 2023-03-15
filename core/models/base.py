@@ -9,10 +9,10 @@ from sqlalchemy.orm import DeclarativeBase, declared_attr, sessionmaker
 class Base(DeclarativeBase):
     pk = Column('id', INT, primary_key=True)
 
-    engine = create_engine('postgresql://belbank:belbank@localhost:5432/api')
+    engine = create_engine('postgresql://admin:admin@localhost:5432/bank')
     session = sessionmaker(bind=engine)
 
-    async_engine = create_async_engine('postgresql+asyncpg://belbank:belbank@localhost:5432/api')
+    async_engine = create_async_engine('postgresql+asyncpg://admin:admin@localhost:5432/bank')
     async_session = async_sessionmaker(bind=async_engine)
 
     @staticmethod
