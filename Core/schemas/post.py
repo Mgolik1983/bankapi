@@ -27,3 +27,5 @@ class PostDetail(PostCreateForm):
         title='Post Author ID',
         description='Post Author Unique ID'
     )
+    class Config:
+        orm_mode = True
