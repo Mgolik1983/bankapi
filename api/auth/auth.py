@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, status
 from pydantic import ValidationError
+# from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-
 from jose import jwt, JWTError
 
 from Core.models import User
