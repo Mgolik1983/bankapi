@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, HTTPException, Header, status, Query
 from jose import jwt, JWTError
 from sqlalchemy.exc import IntegrityError
@@ -98,11 +100,17 @@ async def update_post(
             user = await User.select(User.username == payload.get('sub'))
             if user:
                 user = user[0]
-                post = await Post.get(post_id)
+                post = await Post.get(post_detail.pk)
                 if post:
                     if post.author_id == user.pk:
-                        await  post.delete()
-                        return {'detail': 'post deleted successfully'}
+                        post.title = post_detail.title
+                        post.body = post_detail.body
+                        post.date_created = datetime.now()
+                        try:
+                            await post.save()
+                        except IntegrityError:
+                            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail='post exist')
+                        return PostDetail.from_orm(post)
                     raise HTTPException(
                             status_code=status.HTTP_404_NOT_FOUND,
                             detail='you are not author of the post'
