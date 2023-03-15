@@ -12,9 +12,9 @@ class User(Base):
         return self.username
 
 class Post(Base):
-    title = Column(VARCHAR(128), nullable=False, unique=True),
-    body = Column(TEXT, nullable=False),
-    date_created = Column(TIMESTAMP,default=now),
+    title = Column(VARCHAR(128), nullable=False, unique=True)
+    body = Column(TEXT, nullable=False)
+    date_created = Column(TIMESTAMP, default=now)
     author_id = Column(INT, ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
 
     def __repr__(self):
