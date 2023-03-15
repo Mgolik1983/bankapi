@@ -9,5 +9,5 @@ __all__ = [
     'LoginForm',
     'TokenSchema',
     'PostDetail',
-    'PostCreateForm'
+    'PostCreateForm',
 ]

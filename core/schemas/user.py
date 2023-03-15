@@ -44,7 +44,7 @@ class RegisterForm(BaseModel):
 
 
 class UserInfo(BaseModel):
-    pk: int = Field(ge=1)
+    pk: int = Field(ge=1, default=None)
     email: EmailStr = Field(
         title='User Email',
         description='User Unique Email'
@@ -81,6 +81,8 @@ class UserInfo(BaseModel):
 
     class Config:
         orm_mode = True
+
+
 class LoginForm(BaseModel):
     email: EmailStr = Field(
         title='User Email',
